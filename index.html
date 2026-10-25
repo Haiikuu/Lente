@@ -10,7 +10,13 @@
 <meta name="theme-color" content="#0a0a0b">
 <meta name="color-scheme" content="dark">
 <meta name="description" content="Usa l'iPhone come webcam del PC: 1080p, 60 fps e filtri, senza installare app.">
-<title>Lente · iPhone come webcam</title>
+<meta property="og:title" content="Lente · l'iPhone come webcam del PC">
+<meta property="og:description" content="Video in 1080p a 60 fps con filtri in tempo reale. Funziona con Safari e OBS: niente app da installare, gratis.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<title>Lente · l'iPhone come webcam del PC</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb224'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%231a1204' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%231a1204'/%3E%3C/svg%3E">
 <style>
 :root {
@@ -122,15 +128,22 @@ body.mode-tx { position: fixed; inset: 0; overflow: hidden; overscroll-behavior:
 @keyframes pulse { 50% { opacity: .3; } }
 .chip { font: 600 .78rem var(--mono); color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; white-space: nowrap; flex: none; }
 .stage { min-height: 0; container-type: size; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 0 10px; }
-.frame { position: relative; width: min(100cqw, (100cqh - 28px) * 16 / 9); aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; touch-action: none; box-shadow: 0 0 0 1px var(--line); flex: none; }
+.frame { position: relative; width: min(100cqw, (100cqh - 64px) * 16 / 9); aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; touch-action: none; box-shadow: 0 0 0 1px var(--line); flex: none; }
 .frame .local, .frame .pv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .frame .local { object-fit: cover; z-index: 0; }
 .frame .pv { z-index: 1; }
 .no-gl .frame .pv { display: none; }
 .frame-badge { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: none; padding: 8px; text-align: center; font-size: .78rem; font-weight: 600; background: rgba(0, 0, 0, .66); }
 .paused .frame-badge { display: block; }
-.pcinfo { min-height: 1.3em; font: 500 .74rem var(--mono); color: var(--muted); text-align: center; line-height: 1.3; }
-.pcinfo.warn { color: var(--warn); }
+.pcinfo { min-height: 1.3em; text-align: center; line-height: 1.35; max-width: 560px; display: grid; gap: 3px; }
+.pc-nums { font: 500 .74rem var(--mono); color: var(--muted); }
+.pc-tip { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.pc-tip:empty, .pc-nums:empty { display: none; }
+.pcinfo.warn .pc-tip { color: var(--warn); }
+.pcinfo.ok .pc-tip { color: var(--ok); }
+.frame-warn { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); z-index: 3; background: var(--warn); color: #1a1204; font-size: .78rem; font-weight: 700; padding: 6px 12px; border-radius: 999px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0, 0, 0, .4); }
+.rx-hud .hud-warn { color: #ffb340; }
+.rx-hud .hud-ok { color: #6ee7a0; }
 .filters { display: flex; gap: 6px; overflow-x: auto; padding: 8px 12px 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
 .filters::-webkit-scrollbar { display: none; }
 .fchip { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; padding: 4px; cursor: pointer; scroll-snap-align: center; color: var(--muted); font-size: .72rem; font-weight: 600; }
@@ -203,6 +216,125 @@ input[type=checkbox][role=switch]:checked::after { transform: translateX(20px); 
   .sheet-open .stage { justify-content: center; }
   .sheet { left: auto; top: 0; width: min(340px, 44vw); max-height: none; border-radius: 20px 0 0 20px; border-top: 0; border-left: 1px solid var(--line2); transform: translateX(105%); padding-right: env(safe-area-inset-right); }
 }
+
+/* ── Pagina iniziale sul PC: chiara, "mirino" della Fotocamera ── */
+body.mode-pc-landing {
+  --pl-bg: #e8eaed; --pl-paper: #ffffff; --pl-ink: #15171b; --pl-sub: #545a65; --pl-line: #cfd3d9;
+  --pl-focus: #ffd60a; --pl-screen: #1b1d22;
+  color-scheme: light;
+  background: var(--pl-bg); color: var(--pl-ink);
+  font-family: "Schibsted Grotesk", var(--font);
+  font-size: 17px; line-height: 1.55;
+}
+.mode-pc-landing ::selection { background: var(--pl-focus); color: var(--pl-ink); }
+.pl { max-width: 1160px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 44px) 56px; }
+.pl a { color: inherit; }
+.pl :focus-visible { outline: 3px solid var(--pl-ink); outline-offset: 3px; border-radius: 6px; }
+.pl-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; }
+.pl-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; letter-spacing: -.02em; text-decoration: none; }
+.pl-brand .logo { width: 36px; height: 36px; border-radius: 10px; box-shadow: none; background: var(--pl-focus); }
+.pl-brand .logo svg { width: 22px; height: 22px; }
+.pl-link { font-weight: 600; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--pl-focus); }
+.pl-link:hover { text-decoration-color: var(--pl-ink); }
+
+/* Mirino */
+.vf { position: relative; background: var(--pl-screen); color: #fff; border-radius: 22px; min-height: min(620px, 72vh); display: grid; align-items: end; padding: clamp(28px, 6vw, 84px); overflow: hidden; isolation: isolate; }
+.vf::before { content: ""; position: absolute; inset: 0; z-index: -1; background:
+  radial-gradient(60% 70% at 78% 30%, rgba(255, 214, 10, .10), transparent 70%),
+  radial-gradient(50% 60% at 15% 85%, rgba(120, 140, 255, .10), transparent 70%); }
+.vf-corner { position: absolute; width: clamp(34px, 5vw, 64px); height: clamp(34px, 5vw, 64px); border: 3px solid var(--pl-focus); }
+.vf-tl { top: 22px; left: 22px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+.vf-tr { top: 22px; right: 22px; border-left: 0; border-bottom: 0; border-top-right-radius: 6px; }
+.vf-bl { bottom: 22px; left: 22px; border-right: 0; border-top: 0; border-bottom-left-radius: 6px; }
+.vf-br { bottom: 22px; right: 22px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
+.vf-modes { position: absolute; top: 34px; right: calc(22px + clamp(34px, 5vw, 64px) + 14px); display: flex; gap: 8px; }
+.vf-modes span { font-size: .78rem; font-weight: 700; color: var(--pl-focus); border: 1.5px solid currentColor; border-radius: 6px; padding: 1px 7px; line-height: 1.5; }
+.vf-body { max-width: 760px; }
+.vf h1 { margin: 0; font-size: clamp(2.6rem, 6.6vw, 5.9rem); line-height: .98; letter-spacing: -.04em; font-weight: 800; text-wrap: balance; }
+.vf-sub { margin: 26px 0 30px; max-width: 34em; font-size: clamp(1.02rem, 1.4vw, 1.2rem); color: #c9ccd3; }
+.vf-anim .vf-corner { animation: vf-focus .7s cubic-bezier(.2, .9, .2, 1) both .15s; }
+.vf-anim .vf-tl { --dx: -14px; --dy: -14px; } .vf-anim .vf-tr { --dx: 14px; --dy: -14px; }
+.vf-anim .vf-bl { --dx: -14px; --dy: 14px; } .vf-anim .vf-br { --dx: 14px; --dy: 14px; }
+.vf-anim h1 { animation: vf-sharp .7s ease-out both .15s; }
+@keyframes vf-focus { from { transform: translate(var(--dx), var(--dy)); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes vf-sharp { from { filter: blur(7px); opacity: .5; } to { filter: none; opacity: 1; } }
+
+/* Pulsanti */
+.pl-btn { appearance: none; -webkit-appearance: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 12px; border: 0; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; white-space: nowrap; }
+.pl-btn svg { width: 18px; height: 18px; }
+.pl-btn-focus { background: var(--pl-focus); color: var(--pl-ink); }
+.pl-btn-focus:hover { background: #ffe14d; }
+.pl-btn-big { min-height: 54px; padding: 0 26px; font-size: 1.05rem; }
+.vf .pl-btn-big { color: var(--pl-ink); }
+.vf :focus-visible { outline-color: #fff; }
+
+/* Collegamento */
+.pl-setup { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(28px, 5vw, 72px); padding: clamp(56px, 8vw, 104px) 0 0; scroll-margin-top: 16px; align-items: start; }
+.pl h2 { margin: 0 0 22px; font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.08; letter-spacing: -.03em; font-weight: 800; }
+.pl-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 30px; }
+.pl-step { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 4px 14px; }
+.pl-step-n { font-size: 2.6rem; font-weight: 800; line-height: .9; color: var(--pl-ink); letter-spacing: -.04em; }
+.pl-step h3 { margin: 4px 0 6px; font-size: 1.2rem; letter-spacing: -.01em; }
+.pl-step p { margin: 0 0 8px; max-width: 36em; }
+.pl-note { color: var(--pl-sub); font-size: .94rem; }
+.pl-specs { margin: 10px 0 12px; display: grid; gap: 0; max-width: 30em; border-top: 1px solid var(--pl-line); }
+.pl-specs div { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; border-bottom: 1px solid var(--pl-line); font-size: .95rem; }
+.pl-specs dt { color: var(--pl-sub); }
+.pl-specs dd { margin: 0; font-weight: 700; }
+.pl-panel { background: var(--pl-paper); border-radius: 18px; padding: clamp(20px, 3vw, 30px); box-shadow: 0 1px 0 var(--pl-line), 0 18px 40px -24px rgba(21, 23, 27, .35); position: sticky; top: 20px; }
+.pl-panel-title { font-size: 1.3rem !important; margin-bottom: 18px !important; letter-spacing: -.02em !important; }
+.pl-label { display: block; font-size: .9rem; font-weight: 600; color: var(--pl-sub); margin: 0 0 8px; }
+.pl-copy { display: flex; gap: 8px; margin-bottom: 26px; }
+.pl-url { flex: 1; min-width: 0; height: 46px; padding: 0 12px; border-radius: 12px; border: 1.5px solid var(--pl-line); background: var(--pl-bg); color: var(--pl-ink); font: 500 .86rem var(--mono); }
+.pl-url:focus { border-color: var(--pl-ink); outline: none; }
+.pl-pair { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 18px; align-items: start; padding-top: 22px; border-top: 1px solid var(--pl-line); }
+.pl-qr { background: #fff; border-radius: 12px; padding: 6px; box-shadow: inset 0 0 0 1.5px var(--pl-line); }
+.pl-qr svg { display: block; width: 100%; height: auto; }
+.pl-pair-text { margin: 0 0 10px; font-size: .94rem; color: var(--pl-sub); }
+.pl-code { margin: 0; font: 700 1.7rem var(--mono); letter-spacing: .08em; white-space: nowrap; }
+.pl-textbtn { margin-top: 18px; background: none; border: 0; padding: 0; font: inherit; font-size: .92rem; color: var(--pl-sub); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.pl-textbtn:hover { color: var(--pl-ink); }
+
+/* Filtri */
+.pl-filters, .pl-help { padding-top: clamp(56px, 8vw, 104px); }
+.pl-lead { margin: -8px 0 26px; max-width: 40em; color: var(--pl-sub); font-size: 1.05rem; }
+.pl-swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 14px; }
+.pl-swatches li { display: grid; gap: 8px; font-size: .9rem; font-weight: 600; }
+.pl-sw { display: block; aspect-ratio: 1; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08); }
+
+/* Aiuto */
+.pl-help .pl-q { border-top: 1px solid var(--pl-line); max-width: 760px; }
+.pl-help .pl-q:last-of-type { border-bottom: 1px solid var(--pl-line); }
+.pl-q summary { cursor: pointer; padding: 16px 0; font-weight: 700; font-size: 1.08rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.pl-q summary::-webkit-details-marker { display: none; }
+.pl-q summary::after { content: "+"; font-weight: 500; font-size: 1.4rem; line-height: 1; color: var(--pl-sub); }
+.pl-q[open] summary::after { content: "\2212"; }
+.pl-q p { margin: 0 0 18px; max-width: 40em; }
+
+.pl-foot { margin-top: clamp(56px, 8vw, 96px); padding-top: 22px; border-top: 1px solid var(--pl-line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; color: var(--pl-sub); font-size: .94rem; }
+.pl-foot p { margin: 0; max-width: 44em; }
+
+@media (max-width: 980px) {
+  .pl-setup { grid-template-columns: 1fr; }
+  .pl-panel { position: static; }
+  .pl-swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .vf { min-height: 0; padding-top: 96px; border-radius: 18px; }
+  .vf-corner { width: 28px; height: 28px; }
+  .vf-tl, .vf-tr { top: 16px; } .vf-bl, .vf-br { bottom: 16px; }
+  .vf-tl, .vf-bl { left: 16px; } .vf-tr, .vf-br { right: 16px; }
+  .vf-modes { top: 22px; right: 58px; }
+  .pl-pair { grid-template-columns: 1fr; }
+  .pl-qr { max-width: 200px; }
+  .pl-step { grid-template-columns: 38px minmax(0, 1fr); }
+  .pl-step-n { font-size: 2rem; }
+  .pl-copy { flex-wrap: wrap; }
+  .pl-copy .pl-btn { flex: 1; }
+  .pl-swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+  .pl-swatches li { font-size: .78rem; }
+}
+@media (prefers-reduced-motion: reduce) { .vf-anim .vf-corner, .vf-anim h1 { animation: none; } }
 
 </style>
 </head>
@@ -893,83 +1025,135 @@ function preferH264(tr) {
   } catch (e) { console.warn('Preferenza codec non applicata', e); }
 }
 
+// Priorità alla fluidità: se il Wi‑Fi rallenta, WebRTC abbassa un po' la nitidezza ma tiene i 60 fps
 async function tuneSender(sender) {
   if (!sender || !sender.getParameters) return;
-  const p = sender.getParameters();
-  if (!p.encodings || !p.encodings.length) p.encodings = [{}];
-  p.encodings[0].maxBitrate = 14000000;
-  p.encodings[0].maxFramerate = 60;
-  try { await sender.setParameters(p); }
-  catch (e) {
-    try { delete p.encodings[0].maxFramerate; await sender.setParameters(p); }
-    catch (e2) { console.warn('Parametri di invio non applicati', e2); }
+  const attempts = [
+    p => { p.degradationPreference = 'maintain-framerate'; p.encodings[0].priority = 'high'; p.encodings[0].networkPriority = 'high'; p.encodings[0].maxFramerate = 60; },
+    p => { p.degradationPreference = 'maintain-framerate'; p.encodings[0].maxFramerate = 60; },
+    p => { p.encodings[0].maxFramerate = 60; },
+    () => {},
+  ];
+  for (const tweak of attempts) {
+    const p = sender.getParameters();
+    if (!p.encodings || !p.encodings.length) p.encodings = [{}];
+    p.encodings[0].maxBitrate = 14000000;
+    tweak(p);
+    try { await sender.setParameters(p); return; } catch { /* provo una variante più semplice */ }
   }
+  console.warn('Parametri di invio non applicati');
+}
+
+// Cosa sta frenando l'immagine, detto in modo semplice. tx = dati dell'iPhone, rx = dati del PC
+function diagnose(tx, rx) {
+  if (tx && tx.portrait) return { key: 'portrait', warn: true, text: "Gira l'iPhone in orizzontale: in verticale l'immagine viene tagliata e ingrandita, e si vede sgranata. Se è già in orizzontale, togli il blocco rotazione dal Centro di Controllo." };
+  if (rx && rx.path === 'relay') return { key: 'relay', warn: true, text: 'Il video passa da internet invece che dal Wi‑Fi di casa, per questo è lento. iPhone e PC devono essere sulla stessa rete (non quella «Ospiti»).' };
+  if (tx && tx.camMax && tx.camMax < 50) return { key: 'cammax', warn: true, text: `Questa fotocamera in Safari arriva al massimo a ${tx.camMax} fps. Prova l'altra con «Cambia»: la posteriore è la più nitida.` };
+  if (tx && tx.camFps && tx.camFps < 50) return { key: 'light', warn: true, text: `La fotocamera fa solo ${tx.camFps} fps: c'è poca luce oppure è attivo il Risparmio energetico. Metti una luce davanti al viso e disattiva Risparmio energetico.` };
+  if (tx && tx.limit === 'cpu') return { key: 'cpu', warn: true, text: "L'iPhone è sotto sforzo: chiudi le altre app e, se scalda, toglilo dalla custodia e dal caricatore wireless." };
+  const slowNet = (tx && (tx.limit === 'bandwidth' || tx.loss > 2)) || (rx && rx.kbps > 0 && rx.kbps < 2500) || (rx && rx.fps > 0 && rx.fps < 50);
+  if (slowNet) return { key: 'wifi', warn: true, text: "Il Wi‑Fi è lento o disturbato: avvicina l'iPhone al router, usa la rete a 5 GHz e, se puoi, collega il PC al router col cavo." };
+  if (rx && rx.fps >= 50 && rx.shown > 0 && rx.shown < 45) return { key: 'obs', warn: true, text: 'Il video arriva bene ma OBS fatica a mostrarlo: in OBS › Impostazioni › Avanzate attiva l’accelerazione hardware della sorgente browser, poi riavvia OBS.' };
+  if (rx && rx.fps >= 50) return { key: 'ok', warn: false, text: 'Tutto ok: immagine fluida.' };
+  return null;
 }
 
 /* ───────────────────────── Pagina iniziale ───────────────────────── */
+function repoUrl() {
+  // Se il sito è su GitHub Pages, ricava il link al codice sorgente (utente.github.io/repo)
+  const m = location.hostname.match(/^([a-z0-9-]+)\.github\.io$/i);
+  const repo = location.pathname.split('/').filter(Boolean)[0];
+  return m && repo ? `https://github.com/${m[1]}/${repo}` : null;
+}
+
 function pcLanding() {
-  document.body.className = 'mode-landing';
+  document.body.className = 'mode-landing mode-pc-landing';
   let code = normCode(store.get('rxCode', '')) || randCode();
   store.set('rxCode', code);
   const app = $('#app');
+  const repo = repoUrl();
+  const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const render = () => {
     const obsUrl = `${BASE_URL}?rx=${code}`;
     const phoneUrl = `${BASE_URL}?cam=${code}`;
-    const input = el('input', { class: 'copy-input', readonly: true, value: obsUrl, 'aria-label': 'Indirizzo per OBS', onfocus: e => e.target.select() });
-    const copyBtn = el('button', { class: 'btn btn-accent', type: 'button', html: ICON.copy + '<span>Copia</span>' });
+    const input = el('input', { class: 'pl-url', id: 'obs-url', readonly: true, value: obsUrl, onfocus: e => e.target.select() });
+    const copyBtn = el('button', { class: 'pl-btn pl-btn-focus', type: 'button', html: ICON.copy + '<span>Copia</span>' });
     copyBtn.addEventListener('click', async () => {
       let ok = false;
       try { await navigator.clipboard.writeText(obsUrl); ok = true; } catch { input.select(); try { ok = document.execCommand('copy'); } catch { ok = false; } }
-      copyBtn.innerHTML = (ok ? ICON.check + '<span>Copiato</span>' : ICON.copy + '<span>Selezionato: premi Ctrl+C</span>');
+      copyBtn.innerHTML = ok ? ICON.check + '<span>Copiato</span>' : ICON.copy + '<span>Premi Ctrl+C</span>';
       setTimeout(() => { copyBtn.innerHTML = ICON.copy + '<span>Copia</span>'; }, 2200);
     });
+    const corner = pos => el('span', { class: 'vf-corner vf-' + pos, 'aria-hidden': 'true' });
+    const step = (n, title, ...body) => el('li', { class: 'pl-step' },
+      el('span', { class: 'pl-step-n', 'aria-hidden': 'true', text: n }),
+      el('div', {}, el('h3', { text: title }), ...body));
+    const help = (q, ...a) => el('details', { class: 'pl-q' }, el('summary', { text: q }), el('p', {}, ...a));
 
-    app.replaceChildren(el('div', { class: 'landing' },
-      el('header', { class: 'brand' },
-        el('div', { class: 'logo', html: ICON.lens }),
-        el('div', {},
-          el('h1', { text: 'Lente' }),
-          el('p', { class: 'tag', text: "L'iPhone diventa la webcam del PC: 1080p, 60 fps, filtri. Gratis." }))),
-      el('section', { class: 'steps' },
-        el('article', { class: 'card' },
-          el('div', { class: 'step-n', text: '1' }),
-          el('h2', { text: 'Aggiungi il ricevitore a OBS' }),
-          el('p', {}, 'In OBS, nel riquadro ', el('b', { text: 'Fonti' }), ' premi ', el('b', { text: '+' }), ' › ', el('b', { text: 'Browser' }), ' e incolla questo indirizzo:'),
-          el('div', { class: 'copy' }, input, copyBtn),
-          el('ul', { class: 'kv' },
-            el('li', {}, el('span', { text: 'Larghezza' }), el('b', { text: '1920' })),
-            el('li', {}, el('span', { text: 'Altezza' }), el('b', { text: '1080' })),
-            el('li', {}, el('span', { text: 'Frequenza fotogrammi personalizzata' }), el('b', { text: '60' }))),
-          el('p', { class: 'muted' }, 'Nella finestra di OBS comparirà un codice QR.')),
-        el('article', { class: 'card' },
-          el('div', { class: 'step-n', text: '2' }),
-          el('h2', { text: "Collega l'iPhone" }),
-          el('div', { class: 'qr-row' },
-            el('div', { class: 'qr', html: QR.toSVG(phoneUrl, { margin: 2 }) }),
+    app.replaceChildren(el('div', { class: 'pl' },
+      el('header', { class: 'pl-top' },
+        el('a', { class: 'pl-brand', href: BASE_URL }, el('span', { class: 'logo', html: ICON.lens }), el('span', { text: 'Lente' })),
+        repo ? el('a', { class: 'pl-link', href: repo, target: '_blank', rel: 'noopener', text: 'Codice sorgente' }) : null),
+
+      el('section', { class: 'vf' + (reduceMotion ? '' : ' vf-anim'), 'aria-labelledby': 'pl-title' },
+        corner('tl'), corner('tr'), corner('bl'), corner('br'),
+        el('div', { class: 'vf-modes', 'aria-hidden': 'true' }, el('span', { text: 'HD' }), el('span', { text: '60' })),
+        el('div', { class: 'vf-body' },
+          el('h1', { id: 'pl-title', text: 'L’iPhone diventa la webcam del PC.' }),
+          el('p', { class: 'vf-sub', text: 'Video in 1080p a 60 fps con filtri in tempo reale. Funziona con Safari e OBS: niente app da installare, niente da pagare.' }),
+          el('a', { class: 'pl-btn pl-btn-focus pl-btn-big', href: '#collega', text: 'Collegalo ora' }))),
+
+      el('section', { class: 'pl-setup', id: 'collega', 'aria-labelledby': 'pl-setup-title' },
+        el('div', { class: 'pl-setup-text' },
+          el('h2', { id: 'pl-setup-title', text: 'Collegalo in tre passi' }),
+          el('ol', { class: 'pl-steps' },
+            step('1', 'Aggiungi Lente a OBS',
+              el('p', {}, 'In OBS, nel riquadro ', el('b', { text: 'Fonti' }), ', premi ', el('b', { text: '+' }), ' e scegli ', el('b', { text: 'Browser' }), '. Incolla l’indirizzo del tuo collegamento e imposta:'),
+              el('dl', { class: 'pl-specs' },
+                el('div', {}, el('dt', { text: 'Larghezza' }), el('dd', { text: '1920' })),
+                el('div', {}, el('dt', { text: 'Altezza' }), el('dd', { text: '1080' })),
+                el('div', {}, el('dt', { text: 'Frequenza fotogrammi personalizzata' }), el('dd', { text: '60' }))),
+              el('p', { class: 'pl-note', text: 'Nella finestra di OBS comparirà un codice QR.' })),
+            step('2', 'Collega l’iPhone',
+              el('p', {}, 'Con l’iPhone sulla stessa rete Wi‑Fi del PC, apri la ', el('b', { text: 'Fotocamera' }), ' e inquadra il QR. Si apre Safari: premi ', el('b', { text: 'Avvia la fotocamera' }), '.'),
+              el('p', { class: 'pl-note', text: 'Tienilo in orizzontale e usa la fotocamera posteriore: è la più nitida.' })),
+            step('3', 'Usala come webcam',
+              el('p', {}, 'In OBS premi ', el('b', { text: 'Avvia fotocamera virtuale' }), '. In Discord, Zoom, Meet o Teams scegli la fotocamera ', el('b', { text: 'OBS Virtual Camera' }), '.'),
+              el('p', { class: 'pl-note', text: 'Per avere 60 fps: in OBS › Impostazioni › Video imposta FPS a 60.' })))),
+        el('aside', { class: 'pl-panel', 'aria-label': 'Il tuo collegamento' },
+          el('h2', { class: 'pl-panel-title', text: 'Il tuo collegamento' }),
+          el('label', { class: 'pl-label', for: 'obs-url', text: 'Indirizzo da incollare in OBS' }),
+          el('div', { class: 'pl-copy' }, input, copyBtn),
+          el('div', { class: 'pl-pair' },
+            el('div', { class: 'pl-qr', html: QR.toSVG(phoneUrl, { margin: 2 }) }),
             el('div', {},
-              el('p', {}, "Apri la ", el('b', { text: 'Fotocamera' }), " dell'iPhone e inquadra il QR (questo o quello in OBS). Si aprirà Safari: premi ", el('b', { text: 'Avvia la fotocamera' }), '.'),
-              el('p', { class: 'muted' }, 'Codice del PC: ', el('span', { class: 'code', text: prettyCode(code) })))),
-          el('p', { class: 'muted' }, "iPhone e PC devono essere sulla stessa rete Wi‑Fi. Puoi tenere l'iPhone collegato col cavo per caricarlo.")),
-        el('article', { class: 'card' },
-          el('div', { class: 'step-n', text: '3' }),
-          el('h2', { text: 'Usala come webcam' }),
-          el('p', {}, 'In OBS premi ', el('b', { text: 'Avvia fotocamera virtuale' }), ' («Start Virtual Camera», riquadro Controlli). Poi in Discord, Zoom, Meet o Teams scegli la fotocamera ', el('b', { text: 'OBS Virtual Camera' }), '.'),
-          el('p', { class: 'muted' }, 'Per i 60 fps: in OBS › Impostazioni › Video metti risoluzione 1920×1080 e FPS 60.'))),
-      el('details', { class: 'help' },
-        el('summary', { text: 'Problemi? Guarda qui' }),
-        el('ul', {},
-          el('li', {}, el('b', { text: "L'iPhone dice «PC non trovato»: " }), 'controlla che la sorgente Browser in OBS sia attiva e che il QR sia quello di questo codice.'),
-          el('li', {}, el('b', { text: 'Il video si blocca: ' }), "tieni Safari aperto in primo piano sull'iPhone; se lo schermo si spegne, iOS mette in pausa la fotocamera."),
-          el('li', {}, el('b', { text: 'Pochi fps o immagine sgranata: ' }), "avvicinati al router Wi‑Fi (meglio a 5 GHz). Nella pagina dell'iPhone, Regolazioni › «Info sul PC» mostra fps, codec e velocità."),
-          el('li', {}, el('b', { text: 'In OBS il QR non compare: ' }), "controlla che l'indirizzo incollato inizi con https e finisca con ?rx=" + code + '.'))),
-      el('footer', { class: 'foot' },
-        el('a', { class: 'link', href: `${BASE_URL}?rx=${code}`, target: '_blank', rel: 'noopener', text: 'Prova il ricevitore in una nuova scheda' }),
-        el('span', { class: 'dot-sep', text: '·' }),
-        el('button', { class: 'link', type: 'button', text: 'Genera un nuovo codice', onclick: () => {
-          if (!confirm("Con un nuovo codice dovrai aggiornare l'indirizzo in OBS. Continuare?")) return;
-          code = randCode(); store.set('rxCode', code); render();
-        } }))));
+              el('p', { class: 'pl-label', text: 'QR per l’iPhone' }),
+              el('p', { class: 'pl-pair-text', text: 'Lo stesso QR compare anche in OBS. Se non riesci a inquadrarlo, apri Lente sull’iPhone e scrivi il codice:' }),
+              el('p', { class: 'pl-code', text: prettyCode(code) }))),
+          el('button', { class: 'pl-textbtn', type: 'button', text: 'Genera un nuovo codice', onclick: () => {
+            if (!confirm('Con un nuovo codice dovrai incollare di nuovo l’indirizzo in OBS. Continuare?')) return;
+            code = randCode(); store.set('rxCode', code); render();
+            const t = document.getElementById('collega'); if (t) t.scrollIntoView();
+          } }))),
+
+      el('section', { class: 'pl-filters', 'aria-labelledby': 'pl-filters-title' },
+        el('h2', { id: 'pl-filters-title', text: 'Dieci filtri, tutti dall’iPhone' }),
+        el('p', { class: 'pl-lead', text: 'Scegli il filtro e regola luminosità, contrasto, saturazione, temperatura, nitidezza, pelle liscia, vignettatura e grana. Il PC si aggiorna mentre muovi il dito.' }),
+        el('ul', { class: 'pl-swatches' }, FILTERS.map(f => el('li', {}, el('span', { class: 'pl-sw', style: `background:${f.sw}` }), el('span', { text: f.name }))))),
+
+      el('section', { class: 'pl-help', 'aria-labelledby': 'pl-help-title' },
+        el('h2', { id: 'pl-help-title', text: 'Se qualcosa non va' }),
+        el('p', { class: 'pl-lead', text: 'Sotto l’anteprima, la pagina dell’iPhone ti dice cosa sta peggiorando l’immagine e come rimediare.' }),
+        help('Si vede sgranato', 'Tieni l’iPhone in orizzontale: in verticale l’immagine viene tagliata e ingrandita. Usa la fotocamera posteriore (tasto ', el('b', { text: 'Cambia' }), ') e metti una luce davanti al viso.'),
+        help('Va a scatti', 'Con poca luce l’iPhone scende da solo a 30 fps: accendi una luce e disattiva ', el('b', { text: 'Risparmio energetico' }), '. Poi controlla il Wi‑Fi: meglio la rete a 5 GHz, con l’iPhone vicino al router. In OBS › Impostazioni › Avanzate lascia attiva l’accelerazione hardware della sorgente browser.'),
+        help('L’iPhone dice «PC non trovato»', 'OBS deve essere aperto con la sorgente Browser di Lente, e il QR deve essere quello di questo codice (' + prettyCode(code) + ').'),
+        help('Il video si blocca', 'Tieni Safari aperto in primo piano e lo schermo acceso: se l’iPhone va in standby, iOS mette in pausa la fotocamera. Puoi tenerlo collegato al cavo per caricarlo.'),
+        help('In OBS vedo ancora la versione vecchia', 'Fai doppio clic sulla sorgente Browser e premi ', el('b', { text: 'Aggiorna la cache della pagina corrente' }), '. Sull’iPhone basta ricaricare la pagina.')),
+
+      el('footer', { class: 'pl-foot' },
+        el('p', { text: 'Il video va dall’iPhone al PC attraverso la tua rete Wi‑Fi. Il server gratuito di PeerJS serve solo a farli trovare.' }),
+        repo ? el('a', { class: 'pl-link', href: repo, target: '_blank', rel: 'noopener', text: 'Codice sorgente su GitHub' }) : null)));
   };
   render();
 }
@@ -1094,6 +1278,7 @@ function startReceiver(code) {
       dc.onmessage = ev => {
         let m; try { m = JSON.parse(ev.data); } catch { return; }
         if (m.t === 'bye') { if (st.pc === pc) teardown(); return; }
+        if (m.t === 'txstats' && m.s) { st.tx = m.s; return; }
         if (m.t === 'params' && m.p) {
           st.params = { ...DEFAULT_PARAMS, ...m.p };
           renderer && renderer.setParams(st.params);
@@ -1171,7 +1356,13 @@ function startReceiver(code) {
       };
       st.stats = s;
       if (st.dc && st.dc.readyState === 'open') st.dc.send(JSON.stringify({ t: 'stats', s }));
-      if (st.params.hud) hud.textContent = `${s.w}×${s.h} · ${s.fps} fps ricevuti · ${s.shown} fps mostrati · ${s.codec} · ${fmtMbps(s.kbps)} · ${s.path === 'relay' ? 'via internet' : 'rete locale'}`;
+      if (st.params.hud) {
+        const t = st.tx, d = diagnose(t, s);
+        hud.replaceChildren(
+          el('div', { text: `PC: ${s.w}×${s.h} · ${s.fps} fps ricevuti · ${s.shown} fps mostrati · ${s.codec} · ${fmtMbps(s.kbps)} · ${s.path === 'relay' ? 'via internet' : 'rete locale'}` }),
+          t ? el('div', { text: `iPhone: fotocamera ${t.camFps || '?'} fps · invio ${t.sendW || '?'}×${t.sendH || '?'} a ${t.sendFps || '?'} fps · perdite ${t.loss != null ? t.loss + '%' : '?'}` }) : null,
+          d ? el('div', { class: d.warn ? 'hud-warn' : 'hud-ok', text: d.text }) : null);
+      }
     } catch { /* statistiche non disponibili */ }
   }, 1000);
 
@@ -1188,6 +1379,7 @@ function startPhone(code) {
   const cam = { stream: null, track: null, facing: store.get('facing', 'user'), deviceId: null, devices: [], caps: {}, optical: false, torch: false, frames: 0 };
   const conn = { pc: null, dc: null, sender: null, sid: null, pending: [], remoteSet: false, connected: false };
   window.__lenteTx = conn; // per diagnostica
+  let lastRx = null, lastTx = null; // ultimi dati dal PC e dall'iPhone
 
   /* ── Interfaccia ── */
   const statusPill = el('div', { class: 'pill', role: 'status' }, el('span', { class: 'dot' }), el('span', { class: 'pill-txt', text: 'Fotocamera spenta' }));
@@ -1195,8 +1387,11 @@ function startPhone(code) {
   const local = el('video', { class: 'local', muted: true, playsinline: true, autoplay: true });
   local.muted = true;
   const pv = el('canvas', { class: 'pv' });
-  const frame = el('div', { class: 'frame' }, local, pv, el('div', { class: 'frame-badge', text: 'In pausa · il PC vede uno schermo nero' }));
-  const pcInfo = el('div', { class: 'pcinfo', text: '' });
+  const orientWarn = el('div', { class: 'frame-warn', hidden: true, text: 'Gira l’iPhone in orizzontale' });
+  const frame = el('div', { class: 'frame' }, local, pv, orientWarn, el('div', { class: 'frame-badge', text: 'In pausa · il PC vede uno schermo nero' }));
+  const pcNums = el('div', { class: 'pc-nums' });
+  const pcTip = el('div', { class: 'pc-tip', role: 'status' });
+  const pcInfo = el('div', { class: 'pcinfo' }, pcNums, pcTip);
   const filtersNav = el('nav', { class: 'filters', 'aria-label': 'Filtri' },
     FILTERS.map(f => el('button', { class: 'fchip', type: 'button', 'data-id': f.id, onclick: () => set('filter', f.id) },
       el('span', { class: 'sw', style: `background:${f.sw}` }), el('span', { text: f.name }))));
@@ -1267,9 +1462,10 @@ function startPhone(code) {
     el('p', {}, 'Collegamento al PC ', el('b', { class: 'code', text: prettyCode(code) })),
     startBtn, startMsg,
     el('ul', { class: 'tips' },
-      el('li', { text: 'Tieni questa pagina aperta e lo schermo acceso mentre la usi.' }),
-      el('li', { text: 'Gira l’iPhone in orizzontale per riempire l’inquadratura.' }),
-      el('li', { text: 'Stessa rete Wi‑Fi del PC.' })));
+      el('li', { text: 'Gira l’iPhone in orizzontale: in verticale l’immagine viene tagliata.' }),
+      el('li', { text: 'Più luce = più fluido: con poca luce l’iPhone scende a 30 fps.' }),
+      el('li', { text: 'La fotocamera posteriore (tasto «Cambia») è la più nitida.' }),
+      el('li', { text: 'Stessa rete Wi‑Fi del PC, pagina aperta e schermo acceso.' })));
 
   $('#app').replaceChildren(el('div', { class: 'tx' },
     el('header', { class: 'top' }, statusPill, camChip),
@@ -1435,18 +1631,66 @@ function startPhone(code) {
   function drawPreview() { if (renderer && !params.paused) renderer.draw(local); else if (renderer) renderer.clear(); }
   onVideoFrames(local, () => { cam.frames++; drawPreview(); });
   window.addEventListener('resize', drawPreview);
-  let lastCount = 0, lastT = performance.now();
-  setInterval(() => {
+  let lastCount = 0, lastT = performance.now(), txPrev = null;
+  setInterval(async () => {
     const now = performance.now();
-    const fps = Math.round((cam.frames - lastCount) * 1000 / (now - lastT));
+    const previewFps = Math.round((cam.frames - lastCount) * 1000 / (now - lastT));
     lastCount = cam.frames; lastT = now;
-    if (!cam.track || cam.track.readyState !== 'live') { camChip.textContent = '—'; return; }
-    const s = cam.track.getSettings ? cam.track.getSettings() : {};
+    const live = !!(cam.track && cam.track.readyState === 'live');
+    const s = live && cam.track.getSettings ? cam.track.getSettings() : {};
     const w = local.videoWidth || s.width || 0, h = local.videoHeight || s.height || 0;
-    // fps della fotocamera (quelli inviati al PC); l'anteprima può disegnarne meno senza effetti sul PC
-    const camFps = s.frameRate ? Math.round(s.frameRate) : fps;
-    camChip.textContent = `${Math.max(w, h)}×${Math.min(w, h)} · ${camFps} fps`;
+    const portrait = live && w > 0 && h > w && (((params.rotate % 180) + 180) % 180 === 0);
+    orientWarn.hidden = !portrait;
+    if (!live) { camChip.textContent = '—'; return; }
+    const tx = { portrait, camMax: cam.caps.frameRate && cam.caps.frameRate.max ? Math.round(cam.caps.frameRate.max) : 0, camFps: 0 };
+    if (conn.pc && conn.connected) {
+      try {
+        const r = await conn.pc.getStats();
+        let out = null, src = null, rem = null;
+        r.forEach(x => {
+          const kind = x.kind || x.mediaType;
+          if (x.type === 'outbound-rtp' && kind === 'video') out = x;
+          else if (x.type === 'media-source' && kind === 'video') src = x;
+          else if (x.type === 'remote-inbound-rtp' && kind === 'video') rem = x;
+        });
+        // fps reali della fotocamera (con poca luce iOS li abbassa da solo)
+        if (src && src.framesPerSecond) tx.camFps = Math.round(src.framesPerSecond);
+        if (out) {
+          tx.sendW = out.frameWidth || 0; tx.sendH = out.frameHeight || 0;
+          tx.sendFps = Math.round(out.framesPerSecond || 0);
+          tx.limit = out.qualityLimitationReason || 'none';
+          if (txPrev && out.bytesSent >= txPrev.bytes) tx.kbps = Math.round((out.bytesSent - txPrev.bytes) * 8 / (now - txPrev.t));
+          txPrev = { t: now, bytes: out.bytesSent };
+        }
+        if (rem && typeof rem.fractionLost === 'number') tx.loss = Math.round(rem.fractionLost * 1000) / 10;
+      } catch { /* statistiche non disponibili */ }
+    } else txPrev = null;
+    lastTx = tx;
+    const shownFps = tx.camFps || (s.frameRate ? Math.round(s.frameRate) : previewFps);
+    camChip.textContent = `${w}×${h} · ${shownFps} fps`;
+    if (conn.dc && conn.dc.readyState === 'open') { try { conn.dc.send(JSON.stringify({ t: 'txstats', s: tx })); } catch { /* */ } }
+    renderInfo();
   }, 1000);
+  function renderInfo() {
+    const rx = conn.connected ? lastRx : null;
+    if (rx) {
+      const parts = [`Sul PC: ${rx.w}×${rx.h}`, `${rx.fps} fps`];
+      if (rx.kbps) parts.push(fmtMbps(rx.kbps));
+      if (rx.path) parts.push(rx.path === 'relay' ? 'via internet' : 'Wi‑Fi diretto');
+      pcNums.textContent = parts.join(' · ');
+    } else pcNums.textContent = '';
+    // Il consiglio cambia solo se la situazione resta uguale per qualche secondo (niente sfarfallii)
+    const d = diagnose(lastTx, rx);
+    const key = d ? d.key : '';
+    if (key === tip.pendingKey) tip.count++; else { tip.pendingKey = key; tip.count = 1; }
+    const need = key === 'portrait' ? 1 : (key === '' ? 1 : 3);
+    if (tip.count >= need) tip.shown = d;
+    const s = tip.shown;
+    pcTip.textContent = s ? s.text : '';
+    pcInfo.classList.toggle('warn', !!(s && s.warn));
+    pcInfo.classList.toggle('ok', !!(s && !s.warn));
+  }
+  const tip = { pendingKey: null, count: 0, shown: null };
 
   /* ── Collegamento al PC ── */
   const sig = new Signal(`${ID_PREFIX}-${code.toLowerCase()}-tx-${randCode(5).toLowerCase()}`, {
@@ -1478,7 +1722,8 @@ function startPhone(code) {
     const pc = conn.pc;
     Object.assign(conn, { pc: null, dc: null, sender: null, sid: null, pending: [], remoteSet: false, connected: false });
     if (pc) { try { pc.close(); } catch { /* */ } }
-    pcInfo.textContent = '';
+    lastRx = null;
+    renderInfo();
   }
   // Toccando lo stato si riprova subito (utile dopo «un altro iPhone ha preso il posto»)
   statusPill.addEventListener('click', () => { if (document.body.classList.contains('started') && !conn.connected) retryLater(0, 'Cerco il PC…'); });
@@ -1548,14 +1793,7 @@ function startPhone(code) {
     conn.pending = [];
     setStatus('warn', 'Collegamento al PC…');
   }
-  function showPcStats(s) {
-    const parts = [`Sul PC: ${s.w}×${s.h}`, `${s.fps} fps`];
-    if (s.codec) parts.push(s.codec);
-    if (s.kbps) parts.push(fmtMbps(s.kbps));
-    if (s.path) parts.push(s.path === 'relay' ? 'via internet (più lento)' : 'Wi‑Fi diretto');
-    pcInfo.textContent = parts.join(' · ');
-    pcInfo.classList.toggle('warn', s.path === 'relay' || (s.fps > 0 && s.fps < 45));
-  }
+  function showPcStats(s) { lastRx = s; renderInfo(); }
 
   /* ── Avvio e vita della pagina ── */
   let wakeLock = null;
